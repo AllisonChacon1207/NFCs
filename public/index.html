@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leer NFC</title>
+</head>
+<body>
+    <h1>Prueba de NFC en Chrome</h1>
+    <button id="scan">Escanear NFC</button>
+    <p id="output"></p>
+
+    <script>
+        document.getElementById("scan").addEventListener("click", async () => {
+            try {
+                const ndef = new NDEFReader();
+                await ndef.scan();
+                ndef.onreading = (event) => {
+                    const decoder = new TextDecoder();
+                    const record = event.message.records[0];
+                    document.getElementById("output").innerText = "Contenido NFC: " + decoder.decode(record.data);
+                };
+            } catch (error) {
+                document.getElementById("output").innerText = "Error: " + error;
+            }
+        });
+    </script>
+</body>
+</html>
